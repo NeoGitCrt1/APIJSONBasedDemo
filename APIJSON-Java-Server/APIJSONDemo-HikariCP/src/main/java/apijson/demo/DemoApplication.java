@@ -56,7 +56,7 @@ public class DemoApplication implements ApplicationContextAware, WebServerFactor
 	// SpringBoot 2.x 自定义端口方式  
 	@Override
 	public void customize(ConfigurableServletWebServerFactory server) {
-		server.setPort(8080);
+		server.setPort(8089);
 	}
 	
 	

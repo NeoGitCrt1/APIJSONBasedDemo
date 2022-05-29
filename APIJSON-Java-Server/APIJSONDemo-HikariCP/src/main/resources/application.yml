@@ -6,9 +6,9 @@ spring:
 #    username: root
 #    password: apijson
     hikari:
-      jdbc-url: jdbc:mysql://localhost:3306?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8
+      password: root2019.
+      jdbc-url: jdbc:mysql://122.9.90.164:3306/apijson_test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
       username: root
-      password: apijson
       minimum-idle: 5
       idle-timeout: 600000
       maximum-pool-size: 10

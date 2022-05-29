@@ -31,9 +31,13 @@ import javax.sql.DataSource;
 public class DemoDataSourceConfig {
 
 	@Bean
-	@ConfigurationProperties(prefix = "spring.datasource.hikari")
-	public DataSource dataSource() {
-		return new HikariDataSource();
+//	@ConfigurationProperties(prefix = "spring.datasource.hikari")
+	public HikariDataSource dataSource() {
+		HikariDataSource hikariDataSource = new HikariDataSource();
+		hikariDataSource.setUsername("root");
+		hikariDataSource.setPassword("root2019.");
+		hikariDataSource.setJdbcUrl("jdbc:mysql://122.9.90.164:3306/apijson_test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false");
+		return hikariDataSource;
 	}
 
 }

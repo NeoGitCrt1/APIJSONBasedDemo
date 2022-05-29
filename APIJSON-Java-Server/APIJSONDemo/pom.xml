@@ -18,23 +18,52 @@
 	</properties>
 
 	<dependencies>
+		<!-- JDK 11+ 需要，否则启动报错 NoClassDefFoundError: javax/activation/UnsupportedDataTypeException -->
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 		<!-- 需要的 APIJSON 相关依赖 -->
 		<dependency>
 			<groupId>com.github.APIJSON</groupId>
 			<artifactId>apijson-framework</artifactId>
 			<version>5.1.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.github.Tencent</groupId>
+					<artifactId>APIJSON</artifactId>
+				</exclusion>
+                <exclusion>
+                    <groupId>com.alibaba</groupId>
+                    <artifactId>fastjson</artifactId>
+                </exclusion>
+				<exclusion>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.TommyLemon</groupId>
+					<artifactId>unitauto-jar</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.TommyLemon</groupId>
+					<artifactId>unitauto-java</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
+		<dependency>
+			<groupId>apijson.orm</groupId>
+			<artifactId>apijson-orm</artifactId>
+			<version>5.1.0-F2</version>
+		</dependency>
+
+
 		<!-- 需要用的数据库 JDBC 驱动 -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.27</version>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.2.18</version>
 		</dependency>
 		<!-- Oracle, SQLServer 等其它数据库的 JDBC 驱动，可以在这里加上 Maven 依赖或 libs 目录放 Jar 包并依赖 -->
 

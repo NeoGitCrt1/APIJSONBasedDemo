@@ -29,7 +29,7 @@ public class DemoSQLConfig extends APIJSONSQLConfig {
 
 	static {
 		DEFAULT_DATABASE = DATABASE_MYSQL;  // TODO 默认数据库类型，改成你自己的
-		DEFAULT_SCHEMA = "sys";  // TODO 默认数据库名/模式，改成你自己的，默认情况是 MySQL: sys, PostgreSQL: public, SQL Server: dbo, Oracle: 
+		DEFAULT_SCHEMA = "apijson_test";  // TODO 默认数据库名/模式，改成你自己的，默认情况是 MySQL: sys, PostgreSQL: public, SQL Server: dbo, Oracle:
 
 		// 表名和数据库不一致的，需要配置映射关系。只使用 APIJSONORM 时才需要；
 		// 如果用了 apijson-framework 且调用了 APIJSONApplication.init
@@ -38,8 +38,8 @@ public class DemoSQLConfig extends APIJSONSQLConfig {
 		//		TABLE_KEY_MAP.put(Access.class.getSimpleName(), "access");
 
 		//表名映射，隐藏真实表名，对安全要求很高的表可以这么做
-		TABLE_KEY_MAP.put("User", "apijson_user");
-		TABLE_KEY_MAP.put("Privacy", "apijson_privacy");
+//		TABLE_KEY_MAP.put("User", "apijson_user");
+//		TABLE_KEY_MAP.put("Privacy", "apijson_privacy");
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class DemoSQLConfig extends APIJSONSQLConfig {
 	@JSONField(serialize = false)  // 不在日志打印 账号/密码 等敏感信息
 	@Override
 	public String getDBUri() {
-		return "jdbc:mysql://localhost:3306?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8"; // TODO 改成你自己的，TiDB 可以当成 MySQL 使用，默认端口为 4000
+		return "jdbc:mysql://122.9.90.164:3306?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8"; // TODO 改成你自己的，TiDB 可以当成 MySQL 使用，默认端口为 4000
 	}
 	
 	@JSONField(serialize = false)  // 不在日志打印 账号/密码 等敏感信息
@@ -62,7 +62,7 @@ public class DemoSQLConfig extends APIJSONSQLConfig {
 	@JSONField(serialize = false)  // 不在日志打印 账号/密码 等敏感信息
 	@Override
 	public String getDBPassword() {
-		return "apijson";  // TODO 改成你自己的，TiDB 可以当成 MySQL 使用， 默认密码为空字符串 ""
+		return "root2019.";  // TODO 改成你自己的，TiDB 可以当成 MySQL 使用， 默认密码为空字符串 ""
 	}
 
 }

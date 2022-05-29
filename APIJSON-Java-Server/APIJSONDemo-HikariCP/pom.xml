@@ -18,13 +18,38 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.ssssssss</groupId>
+			<artifactId>magic-api-spring-boot-starter</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<!-- JDK 11+ 需要，否则启动报错 NoClassDefFoundError: javax/activation/UnsupportedDataTypeException -->
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 		<!-- 需要的 APIJSON 相关依赖 -->
 		<dependency>
 			<groupId>com.github.APIJSON</groupId>
 			<artifactId>apijson-framework</artifactId>
 			<version>5.1.0</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.github.Tencent</groupId>
+			<artifactId>APIJSON</artifactId>
+			<version>5.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.TommyLemon</groupId>
+			<artifactId>unitauto-java</artifactId>
+			<version>2.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.TommyLemon</groupId>
+			<artifactId>unitauto-jar</artifactId>
+			<version>2.7.2</version>
+		</dependency>
 		<!-- 需要用的数据库 JDBC 驱动 -->
 		<dependency>
 			<groupId>mysql</groupId>

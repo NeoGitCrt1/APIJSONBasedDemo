@@ -14,11 +14,14 @@ limitations under the License.*/
 
 package apijson.demo;
 
-import java.net.URLDecoder;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
+import apijson.JSON;
+import apijson.RequestMethod;
+import apijson.StringUtil;
+import apijson.framework.APIJSONController;
+import apijson.framework.APIJSONParser;
+import apijson.orm.AbstractParser;
+import apijson.orm.Parser;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,10 +30,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import apijson.RequestMethod;
-import apijson.StringUtil;
-import apijson.framework.APIJSONController;
-import apijson.orm.Parser;
+import javax.servlet.http.HttpSession;
+import java.net.URLDecoder;
+import java.util.Map;
+
+import static apijson.framework.APIJSONParser.APIJSON_CREATOR;
 
 
 /**请求路由入口控制器，包括通用增删改查接口等，转交给 APIJSON 的 Parser 来处理
@@ -44,13 +48,21 @@ import apijson.orm.Parser;
  * <br > 3.调试方便 - 建议使用 APIAuto(http://apijson.cn/api) 或 Postman
  * @author Lemon
  */
-//@RestController
-//@RequestMapping("")
-public class DemoController extends APIJSONController<Long> {
+@RestController
+@RequestMapping("")
+public class FlexApi  {
 
-	@Override
 	public Parser<Long> newParser(HttpSession session, RequestMethod method) {
-		return super.newParser(session, method).setNeedVerify(false);  // TODO 这里关闭校验，方便新手快速测试，实际线上项目建议开启
+		Parser<Long> parser = (Parser<Long>) APIJSON_CREATOR.createParser();
+		parser.setMethod(method);
+		if (parser instanceof APIJSONParser) {
+			((APIJSONParser<Long>) parser).setSession(session);
+		}
+		// 可以更方便地通过日志排查错误
+		if (parser instanceof AbstractParser) {
+			((AbstractParser<Long>) parser).setRequestURL(null);
+		}
+		return parser;
 	}
 
 	/**增删改查统一接口，这个一个接口可替代 7 个万能通用接口，牺牲一些路由解析性能来提升一点开发效率
@@ -60,9 +72,8 @@ public class DemoController extends APIJSONController<Long> {
 	 * @return
 	 */
 	@PostMapping(value = "{method}")  // 如果和其它的接口 URL 冲突，可以加前缀，例如改为 crud/{method} 或 Controller 注解 @RequestMapping("crud")
-	@Override
 	public String crud(@PathVariable String method, @RequestBody String request, HttpSession session) {
-		return super.crud(method, request, session);
+		return newParser(session, RequestMethod.valueOf(method.toUpperCase())).parse(request);
 	}
 
 	/**增删改查统一接口，这个一个接口可替代 7 个万能通用接口，牺牲一些路由解析性能来提升一点开发效率
@@ -74,26 +85,22 @@ public class DemoController extends APIJSONController<Long> {
 	 * @return
 	 */
 	@PostMapping("{method}/{tag}")  // 如果和其它的接口 URL 冲突，可以加前缀，例如改为 crud/{method}/{tag} 或 Controller 注解 @RequestMapping("crud")
-	@Override
 	public String crudByTag(@PathVariable String method, @PathVariable String tag, @RequestParam Map<String, String> params, @RequestBody String request, HttpSession session) {
-		return super.crudByTag(method, tag, params, request, session);
+		return parseByTag(RequestMethod.valueOf(method.toUpperCase()), tag, params, request, session);
 	}
 
-	/**获取
-	 * 只为兼容HTTP GET请求，推荐用HTTP POST，可删除
-	 * @param request 只用String，避免encode后未decode
-	 * @param session
-	 * @return
-	 * @see {@link RequestMethod#GET}
-	 */
-	@GetMapping("get/{request}")
-	public String openGet(@PathVariable String request, HttpSession session) {
-		try {
-			request = URLDecoder.decode(request, StringUtil.UTF_8);
-		} catch (Exception e) {
-			// Parser 会报错
+
+	public String parseByTag(RequestMethod method, String tag, Map<String, String> params, String request, HttpSession session) {
+
+		JSONObject req = AbstractParser.wrapRequest(method, tag, JSON.parseObject(request), false);
+		if (req == null) {
+			req = new JSONObject(true);
 		}
-		return get(request, session);
+		if (params != null && params.isEmpty() == false) {
+			req.putAll(params);
+		}
+
+		return newParser(session, method).parse(req);
 	}
 
 }

@@ -14,7 +14,11 @@ limitations under the License.*/
 
 package apijson.demo;
 
-import apijson.framework.APIJSONSQLConfig;
+import apijson.RequestMethod;
+import apijson.orm.AbstractSQLConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
 /**SQL 配置，这里不配置数据库账号密码等信息，改为使用 DemoDataSourceConfig 来配置
@@ -23,11 +27,14 @@ import apijson.framework.APIJSONSQLConfig;
  * https://github.com/Tencent/APIJSON/blob/master/%E8%AF%A6%E7%BB%86%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.md#c-1-1%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E9%93%BE%E6%8E%A5
  * @author Lemon
  */
-public class DemoSQLConfig extends APIJSONSQLConfig {
+@Component
+public class DemoSQLConfig extends AbstractSQLConfig {
+
+
 
 	static {
 		DEFAULT_DATABASE = DATABASE_MYSQL;  // TODO 默认数据库类型，改成你自己的
-		DEFAULT_SCHEMA = "sys";  // TODO 默认数据库名/模式，改成你自己的，默认情况是 MySQL: sys, PostgreSQL: public, SQL Server: dbo, Oracle: 
+		DEFAULT_SCHEMA = "apijson_test";  // TODO 默认数据库名/模式，改成你自己的，默认情况是 MySQL: sys, PostgreSQL: public, SQL Server: dbo, Oracle:
 
 		// 表名和数据库不一致的，需要配置映射关系。只使用 APIJSONORM 时才需要；
 		// 如果用了 apijson-framework 且调用了 APIJSONApplication.init
@@ -40,9 +47,31 @@ public class DemoSQLConfig extends APIJSONSQLConfig {
 		TABLE_KEY_MAP.put("Privacy", "apijson_privacy");
 	}
 
+	public DemoSQLConfig() {
+		super(RequestMethod.GET);
+	}
+
 	@Override
 	public String getDBVersion() {
 		return "5.7.22";  // "8.0.11";  // TODO 改成你自己的 MySQL 或 PostgreSQL 数据库版本号  // MYSQL 8 和 7 使用的 JDBC 配置不一样
+	}
+
+	@Autowired
+	HikariDataSource hikariDataSource;
+
+	@Override
+	public String getDBUri() {
+		return hikariDataSource.getJdbcUrl();
+	}
+
+	@Override
+	public String getDBAccount() {
+		return hikariDataSource.getUsername();
+	}
+
+	@Override
+	public String getDBPassword() {
+		return hikariDataSource.getPassword();
 	}
 
 }

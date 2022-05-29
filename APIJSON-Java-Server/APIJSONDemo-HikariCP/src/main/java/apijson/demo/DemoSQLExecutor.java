@@ -18,7 +18,7 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-import apijson.framework.APIJSONSQLExecutor;
+import apijson.orm.AbstractSQLExecutor;
 import apijson.orm.SQLConfig;
 
 
@@ -26,7 +26,8 @@ import apijson.orm.SQLConfig;
  * 具体见 https://github.com/Tencent/APIJSON/issues/151
  * @author Lemon
  */
-public class DemoSQLExecutor extends APIJSONSQLExecutor {
+
+public class DemoSQLExecutor extends AbstractSQLExecutor {
 	public static final String TAG = "DemoSQLExecutor";
 
 	// 适配连接池，如果这里能拿到连接池的有效 Connection，则 SQLConfig 不需要配置 dbVersion, dbUri, dbAccount, dbPassword
